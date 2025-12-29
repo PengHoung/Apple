@@ -6,15 +6,14 @@ import TvHome from './component/tv/TvHome'
 import DropNav from './component/drop-nav'
 import Entertain from './component/entertainment/entertain'
 
-
 function App() {
   const [activeDropdown, setActiveDropdown] = useState(null)
   const [dropdownTimeout, setDropdownTimeout] = useState(null)
   const location = useLocation();
+
   const isEntertainment = location.pathname === '/entertainment';
   const navTheme = isEntertainment ? 'dark' : 'light';
 
-  // Define styles based on theme
   const navClass = isEntertainment
     ? "fixed left-0 z-50 w-full flex h-12 items-center justify-between lg:justify-center border-b border-white/10 bg-black/90 px-6 py-3 shadow-lg backdrop-blur-md transition-colors duration-300"
     : "fixed left-0 z-50 w-full flex h-12 items-center justify-between lg:justify-center border border-white/20 bg-white/70 px-6 py-3 shadow-lg backdrop-blur-md transition-colors duration-300";
@@ -24,7 +23,7 @@ function App() {
     : "flex items-center gap-8.5 text-sm font-medium text-gray-800";
 
   const hoverClass = isEntertainment ? "hover:text-gray-300" : "hover:text-black";
-  const svgFill = isEntertainment ? "fill-white" : "fill-black"; // Helper for SVGs if needed, though most use currentColor
+  const svgFill = isEntertainment ? "fill-white" : "fill-black";
 
   const showDropdown = (dropdownName) => {
     if (dropdownTimeout) {
@@ -58,7 +57,6 @@ function App() {
                 </svg>
               </span>
             </Link>
-            {/* Part Store Dropdown */}
             <div className="hidden lg:flex items-center gap-8.5">
               <div className="relative" onMouseEnter={() => showDropdown('store')} onMouseLeave={hideDropdown}>
                 <a href="#" className={`${hoverClass} text-[12px] font-normal`}>Store</a>
@@ -113,7 +111,6 @@ function App() {
                   1.0182 0 0 1 -1.0166 1.0171h-8.7069a1.0182 1.0182 0 0 1 -1.0165-1.0171v-7.7155a1.0178 1.0178 0 0 1 1.0166-1.0166h8.707a1.0178 1.0178 0 0 1 1.0164 1.0166z"></path>
               </svg>
             </button>
-            {/* Hamburger Menu (Mobile Only) */}
             <button className={`lg:hidden ${hoverClass} cursor-pointer`}>
               <svg width="18" height="18" viewBox="0 0 18 18">
                 <polyline id="globalnav-menutrigger-bread-bottom" className="globalnav-menutrigger-bread globalnav-menutrigger-bread-bottom transition-all duration-300 opacity-100" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" points="2 12, 16 12">
@@ -126,7 +123,6 @@ function App() {
         </nav>
 
         <div className="w-[100%] flex flex-col gap-4">
-
           <Routes>
             <Route path="/tv-home" element={<TvHome />} />
             <Route path="/entertainment" element={<Entertain />} />
@@ -134,13 +130,9 @@ function App() {
           </Routes>
           <DropNav activeDropdown={activeDropdown} showDropdown={showDropdown} hideDropdown={hideDropdown} theme={navTheme} />
         </div>
-
       </div>
-
-
     </div>
   )
 }
-
 
 export default App

@@ -54,7 +54,6 @@ export default function Footer() {
         <footer className="w-full bg-[#1d1d20] flex flex-col items-center justify-center font-sans">
             <div className="w-full max-w-[1006px] px-4 md:px-0 flex flex-col items-center">
 
-                {/* 🔹 FOOTER PART 1 — LEGAL & DISCLAIMERS */}
                 <div className="w-full max-w-[980px] h-auto pt-8 pb-4 border-b border-gray-700/40 text-[11px] leading-relaxed text-gray-400 font-light text-left">
                     <p className="mb-3">
                         1. Trade-in values will vary based on the condition, year, and configuration of your eligible trade-in device. Not all devices are eligible for credit. You must be at least the age of majority to be eligible to trade in for credit or for an Apple Gift Card. Trade-in value may be applied toward qualifying new device purchase, or added to an Apple Gift Card. Actual value awarded is based on receipt of a qualifying device matching the description provided when estimate was made. Sales tax may be assessed on full value of a new device purchase. In-store trade-in requires presentation of a valid photo ID (local law may require saving this information). Offer may not be available in all stores and may vary between in-store and online trade-in. Some stores may have additional requirements. Apple or its trade-in partners reserve the right to refuse, cancel, or limit quantity of any trade-in transaction for any reason. More details are available from Apple's trade-in partner for trade-in and recycling of eligible devices. Restrictions and limitations may apply.
@@ -79,7 +78,6 @@ export default function Footer() {
                     </p>
                 </div>
 
-                {/* 🔹 FOOTER PART 2 — NAVIGATION LINKS (MAIN FOOTER GRID) */}
                 <div className="w-full max-w-[980px] h-auto pt-8 flex flex-col md:flex-row md:justify-between text-[11px]">
                     {/* Column 1 */}
                     <div className="w-full md:w-[196px] flex flex-col gap-6 mb-6 md:mb-0">
@@ -168,7 +166,6 @@ export default function Footer() {
                     </div>
                 </div>
 
-                {/* 🔹 FOOTER PART 3 — BOTTOM BAR */}
                 <div className="w-full max-w-[980px] h-auto pt-8 pb-4 text-[11px] text-[#a1a1a6]">
                     <div className="border-b border-gray-700/40 pb-2 mb-2">
                         <p>More ways to shop: <a href="#" className="text-[#2997ff] hover:underline">Find an Apple Store</a> or <a href="#" className="text-[#2997ff] hover:underline">other retailer</a> near you. Or call 1-800-MY-APPLE.</p>

@@ -1,43 +1,41 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 
-// --- Asset Imports ---
-// Using eager imports to ensuring order.
 const bigImages = import.meta.glob('../../assets/imageBig/*.{jpeg,jpg,png}', { eager: true, as: 'url' })
-const smallImages = import.meta.glob('../../assets/imgaeSmall/*.{jpeg,jpg,png}', { eager: true, as: 'url' })
+const smallImages = import.meta.glob('../../assets/imageSmall/*.{jpeg,jpg,png}', { eager: true, as: 'url' })
 
-const processImages = (imgObj) => Object.values(imgObj).sort()
+const processImages = (imgObj) => Object.entries(imgObj).map(([path, url]) => {
+    const filename = path.split('/').pop() || ''
+    const name = filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ')
+    return { url, name }
+}).sort((a, b) => a.name.localeCompare(b.name))
+
 const bigImgList = processImages(bigImages)
 const smallImgList = processImages(smallImages)
 
-const TOTAL_SLIDES = 9
+const TOTAL_SLIDES = Math.max(bigImgList.length, smallImgList.length)
 
-// Static Metadata
 const SLIDE_DATA = [
-    { title: 'Foundation', type: 'Show', button: 'Stream now' },
-    { title: 'AirPods Pro', type: 'Product', button: 'Buy' }, // Fallback logic handles standard text
-    { title: 'NBA 2K24', type: 'Game', button: 'Play now' },
-    { title: 'Killers of the Flower Moon', type: 'Movie', button: 'Stream now' },
-    { title: 'Severance', type: 'Show', button: 'Stream now' },
-    { title: 'Minecraft', type: 'Game', button: 'Play now' },
-    { title: 'Monarch', type: 'Show', button: 'Stream now' },
-    { title: 'Ted Lasso', type: 'Show', button: 'Stream now' },
-    { title: 'Prehistoric Planet', type: 'Show', button: 'Stream now' },
+    { type: 'Show', button: 'Stream now' },
+    { type: 'Product', button: 'Buy' },
+    { type: 'Game', button: 'Play now' },
+    { type: 'Movie', button: 'Stream now' },
 ]
 
 const SLIDES = Array.from({ length: TOTAL_SLIDES }).map((_, i) => ({
     id: i,
-    bigImg: bigImgList[i % bigImgList.length],
-    smallImg: smallImgList[i % smallImgList.length],
-    ...SLIDE_DATA[i % SLIDE_DATA.length]
+    bigImg: bigImgList[i % bigImgList.length]?.url || '',
+    smallImg: smallImgList[i % smallImgList.length]?.url || '',
+    bigTitle: bigImgList[i % bigImgList.length]?.name || `Slide ${i + 1}`,
+    smallTitle: smallImgList[i % smallImgList.length]?.name || `Slide ${i + 1}`,
+    type: SLIDE_DATA[i % SLIDE_DATA.length].type,
+    button: SLIDE_DATA[i % SLIDE_DATA.length].button,
+    bigButton: 'Stream Now'
 }))
 
-// --- Constants ---
 
-// Timings
 const BIG_TRANSITION = 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)'
 const SMALL_TRANSITION = 'transform 500ms cubic-bezier(0.4, 0, 0.2, 1)'
 
-// Dimensions
 const BIG_SLIDE_HEIGHT = 668
 const BIG_SLIDE_WIDTH_DESKTOP = 1250
 const BIG_SLIDE_GAP = 20
@@ -46,18 +44,15 @@ const SMALL_SLIDE_HEIGHT = 265
 const SMALL_SLIDE_WIDTH_PX = 430
 const SMALL_SLIDE_GAP = 20
 
-// Clones
-const CLONE_COUNT = 3 // Increased clone count to ensure safety with wide viewport
+const CLONE_COUNT = 3
 
 export default function EntertainmentSlider() {
-    // Track Index includes clones
     const [currentIndex, setCurrentIndex] = useState(CLONE_COUNT)
     const [isTransitioning, setIsTransitioning] = useState(false)
     const [windowWidth, setWindowWidth] = useState(0)
 
     const bigTrackRef = useRef(null)
 
-    // --- Init ---
     useEffect(() => {
         setWindowWidth(window.innerWidth)
         const handleResize = () => setWindowWidth(window.innerWidth)
@@ -65,14 +60,12 @@ export default function EntertainmentSlider() {
         return () => window.removeEventListener('resize', handleResize)
     }, [])
 
-    // --- Logic ---
     const extendedSlides = [
         ...SLIDES.slice(-CLONE_COUNT),
         ...SLIDES,
         ...SLIDES.slice(0, CLONE_COUNT)
     ]
 
-    // Real Index (0-8)
     const realIndex = (currentIndex - CLONE_COUNT + SLIDES.length) % SLIDES.length
 
     const handleSlideChange = useCallback((newIndex, smooth = true) => {
@@ -97,55 +90,38 @@ export default function EntertainmentSlider() {
         }
     }
 
-    // --- Layout Calculations ---
 
-    // Big Slider - Centered
     // If desktop (width > 1250 + padding), use fixed 1250. Else use %
-    const isDesktop = windowWidth > 768 // Simple breakpoint
+    const isDesktop = windowWidth > 768
     const bigSlideWidth = isDesktop ? BIG_SLIDE_WIDTH_DESKTOP : (windowWidth * 0.85)
     const bigGap = isDesktop ? BIG_SLIDE_GAP : 10
 
     const bigCenterOffset = (windowWidth - bigSlideWidth) / 2
     const bigTrackTranslate = bigCenterOffset - (currentIndex * (bigSlideWidth + bigGap))
 
-    // Small Slider - Centered
     const smallSlideWidth = isDesktop ? SMALL_SLIDE_WIDTH_PX : (windowWidth * 0.45)
     const smallGap = isDesktop ? SMALL_SLIDE_GAP : 10
     const smallCenterOffset = (windowWidth - smallSlideWidth) / 2
     const smallTrackTranslate = smallCenterOffset - (currentIndex * (smallSlideWidth + smallGap))
 
-    // --- Dot Logic (Windowing) ---
-    const DOT_WIDTH = 8 // base dot spacing unit
+    const DOT_WIDTH = 8
     const VISIBLE_DOTS = 7
-    // We want the dots container to shift so the 'realIndex' dot is approx centered in the window
-    // But we clamp it so we don't show empty space at ends.
 
-    // 0 1 2 [3] 4 5 6  (Index 3 active)
 
     let dotTranslate = 0
     const dotGap = 12
-    const dotContainerWidth = VISIBLE_DOTS * (dotGap + 12) // approx width
+    const dotContainerWidth = VISIBLE_DOTS * (dotGap + 12)
 
-    // If 7 visible. Center is index 3 (0-indexed relative to window).
-    // We want realIndex to be at position 3.
-    // Shift = - (realIndex - 3) * (dotWidth + gap)
 
     // Clamped Logic:
-    // If realIndex < 3: Shift = 0
-    // If realIndex > Total-4: Shift = Max
-    // Else: Shift based on index
 
     if (realIndex > 3 && realIndex < SLIDES.length - 4) {
-        dotTranslate = (realIndex - 3) * (12 + 16) // roughly shift by item width
+        dotTranslate = (realIndex - 3) * (12 + 16)
     } else if (realIndex >= SLIDES.length - 4) {
         dotTranslate = (SLIDES.length - 7) * (12 + 16)
     }
-    // Wait, simplified:
-    // Layout: [Dot][Dot]...
-    // We just translate the specific track of dots
-    // Actually simpler: 
     // Let's just translate based on index with clamping.
-    const dotItemWidth = 20 // Approx space per dot (8px dot + 12px gap)
+    const dotItemWidth = 20
     const maxShift = (TOTAL_SLIDES - VISIBLE_DOTS) * dotItemWidth
 
     let targetShift = (realIndex - 3) * dotItemWidth
@@ -153,7 +129,6 @@ export default function EntertainmentSlider() {
     if (targetShift > maxShift) targetShift = maxShift
 
 
-    // Swipe
     const touchStartX = useRef(0)
     const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX }
     const onTouchEnd = (e) => {
@@ -168,18 +143,15 @@ export default function EntertainmentSlider() {
     return (
         <div className="w-full bg-[#f5f5f7] pb-6 overflow-hidden font-sans ">
 
-            {/* --- Section Title --- */}
             <div className="w-full flex justify-center pt-16 pb-8">
                 <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">Endless entertainment.</h2>
             </div>
 
-            {/* --- Main Container --- */}
             <div
                 className="w-full relative flex flex-col gap-6"
                 onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}
             >
 
-                {/* === BIG SLIDER === */}
                 <div className="w-full overflow-visible" style={{ height: BIG_SLIDE_HEIGHT }}>
                     <div
                         ref={bigTrackRef}
@@ -205,8 +177,6 @@ export default function EntertainmentSlider() {
                                         WebkitBackfaceVisibility: 'hidden'
                                     }}
                                     onClick={() => {
-                                        // Optional: Click slide to center logic
-                                        if (!isActive) handleSlideChange(currentIndex + (i - currentIndex))
                                     }}
                                 >
                                     <img
@@ -214,17 +184,14 @@ export default function EntertainmentSlider() {
                                         alt={slide.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                     />
-                                    {/* Gradient */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-90"></div>
 
-                                    {/* Content: Bottom Left */}
                                     <div className="absolute bottom-12 left-12 flex items-center gap-6 z-20">
-                                        <span className={`text-white font-bold text-4xl drop-shadow-md transition-opacity duration-500 ${isActive ? 'opacity-100' : 'opacity-40'}`}>
-                                            {slide.button === 'Button' ? slide.category : slide.title}
-                                        </span>
                                         <button className={`bg-white text-black px-7 py-3 rounded-full font-bold text-sm transition-all duration-300 hover:bg-gray-200 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                                            Stream now
+                                            {slide.bigButton}
                                         </button>
+                                        <span className={`text-white font-bold text-4xl drop-shadow-md transition-opacity duration-500 ${isActive ? 'opacity-100' : 'opacity-40'}`}>
+                                            {slide.bigTitle}
+                                        </span>
                                     </div>
                                 </div>
                             )
@@ -232,7 +199,6 @@ export default function EntertainmentSlider() {
                     </div>
                 </div>
 
-                {/* === SMALL SLIDER === */}
                 <div className="w-full overflow-visible" style={{ height: SMALL_SLIDE_HEIGHT }}>
                     <div
                         className="flex h-full"
@@ -256,9 +222,8 @@ export default function EntertainmentSlider() {
                                     className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
                                 />
 
-                                {/* Overlay: Title Left, Button Right */}
                                 <div className="absolute inset-x-0 bottom-0 p-5 flex justify-between items-end bg-gradient-to-t from-black/80 to-transparent">
-                                    <span className="text-white font-bold text-lg">{slide.title}</span>
+                                    <span className="text-white font-bold text-lg">{slide.smallTitle}</span>
                                     <button className="bg-white/95 text-black px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide">
                                         {slide.type === 'Game' ? 'Play Now' : 'Watch Now'}
                                     </button>
@@ -268,18 +233,16 @@ export default function EntertainmentSlider() {
                     </div>
                 </div>
 
-                {/* === DOTS (PILL STYLE + 7 VISIBLE) === */}
                 <div className="w-full flex justify-center pt-6 overflow-hidden">
-                    {/* Mask container for 7 dots approx width */}
                     <div
                         className="overflow-hidden"
-                        style={{ width: '180px' }} // Approx width for 7 dots
+                        style={{ width: '180px' }}
                     >
                         <div
                             className="flex items-center gap-3 transition-transform duration-500 ease-out"
                             style={{
                                 transform: `translateX(-${targetShift}px)`,
-                                paddingLeft: '5px' // Initial visual padding
+                                paddingLeft: '5px'
                             }}
                         >
                             {SLIDES.map((_, idx) => {
@@ -289,8 +252,8 @@ export default function EntertainmentSlider() {
                                         key={idx}
                                         onClick={() => handleSlideChange(CLONE_COUNT + idx)}
                                         className={`shrink-0 rounded-full transition-all duration-300 ${isActive
-                                            ? 'w-8 h-2.5 bg-gray-900' // Active Pill
-                                            : 'w-2.5 h-2.5 bg-gray-400 hover:bg-gray-600' // Inactive Circle
+                                            ? 'w-8 h-2.5 bg-gray-900'
+                                            : 'w-2.5 h-2.5 bg-gray-400 hover:bg-gray-600'
                                             }`}
                                         aria-label={`Go to slide ${idx + 1}`}
                                     />

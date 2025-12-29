@@ -1,14 +1,11 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 
-// --- Asset Imports ---
 const bookImages = import.meta.glob('../../assets/imageEntertain/book/*.{jpeg,jpg,png}', { eager: true, as: 'url' })
 const processImages = (imgObj) => Object.values(imgObj).sort()
 const bookImgList = processImages(bookImages)
 
 const TOTAL_SLIDES = 18
 
-// Static Metadata based on filenames
-// Files are: Call Hart Brim Stone, A Marriage At Sea, Alchemmised, Andrew Ross Sorkin, Brandon Sanderson, Closing Time, Dan Brown, Heart The Lover, Janet Evanovich, Just A litile Desire, Michael Connelly, Seeing other people, The Correspondent, The God Of The Wood, The Mating Game, The New Times, The True True Story, Their Deadly Truth
 const SLIDE_DATA = [
     { title: 'Call Hart Brim Stone', author: 'Mystery Author', button: 'Read now' },
     { title: 'A Marriage At Sea', author: 'Romance Author', button: 'Read now' },
@@ -37,45 +34,58 @@ const SLIDES = Array.from({ length: TOTAL_SLIDES }).map((_, i) => ({
 }))
 
 export default function BookSlider() {
-    // Triple the slides to ensure coverage
     const extendedSlides = [...SLIDES, ...SLIDES, ...SLIDES]
 
     return (
         <div className="w-full pb-6 overflow-hidden font-sans pt-10">
             <style>{`
+                :root {
+                    --book-slide-width: 140px;
+                    --book-slide-height: 210px;
+                }
+                @media (min-width: 768px) {
+                    :root {
+                        --book-slide-width: 198px;
+                        --book-slide-height: 300px;
+                    }
+                }
                 @keyframes marquee-book {
                     0% { transform: translateX(0); }
-                    100% { transform: translateX(-33.33%); } /* Move 1/3 since we have 3 sets */
+                    100% { transform: translateX(-33.33%); }
                 }
                 .animate-marquee-book {
                     animation: marquee-book 70s linear infinite;
                 }
+                .animate-marquee-book:hover {
+                    animation-play-state: paused;
+                }
             `}</style>
 
             <div className="w-full relative flex flex-col gap-6">
-                {/* === BOOK SLIDER === */}
-                <div className="w-full overflow-hidden" style={{ height: 380 }}>
+                <div className="w-full overflow-hidden h-[300px] md:h-[380px]">
                     <div
                         className="flex h-full animate-marquee-book"
                         style={{
                             gap: '20px',
-                            width: 'max-content' // Ensure width fits all items
+                            width: 'max-content'
                         }}
                     >
                         {extendedSlides.map((slide, i) => (
                             <div
                                 key={`${slide.id}-${i}`}
                                 className="relative shrink-0 flex flex-col cursor-pointer group"
-                                style={{ width: '198px', height: '100%' }}
+                                style={{ width: 'var(--book-slide-width)', height: '100%' }}
                             >
-                                <div className="relative w-full h-[300px] rounded-xl overflow-hidden bg-gray-900 shadow-md transition-transform duration-300 group-hover:scale-[1.02]">
+                                <div
+                                    className="relative w-full rounded-xl overflow-hidden bg-gray-900 shadow-md transition-transform duration-300 group-hover:scale-[1.02]"
+                                    style={{ height: 'var(--book-slide-height)' }}
+                                >
                                     <img
                                         src={slide.smallImg}
                                         alt={slide.title}
                                         className="w-full h-full object-cover transition-all duration-300 group-hover:brightness-50"
                                     />
 
-                                    {/* Read Now Overlay - Visible on Group Hover */}
                                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                         <button className="bg-white text-black px-6 py-3 rounded-full font-bold text-sm flex items-center gap-2 hover:scale-105 transition-transform">
                                             Read now

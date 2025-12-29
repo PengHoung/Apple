@@ -1,25 +1,22 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 
-// --- Asset Imports ---
-const movieImages = import.meta.glob('../../assets/imageEntertain/movie/*.{jpeg,jpg,png}', { eager: true, as: 'url' })
+const gameImages = import.meta.glob('../../assets/imageEntertain/movie/*.{jpeg,jpg,png}', { eager: true, as: 'url' })
 const processImages = (imgObj) => Object.values(imgObj).sort()
-const movieImgList = processImages(movieImages)
+const movieImgList = processImages(gameImages)
 
 const TOTAL_SLIDES = 10
 
-// Static Metadata based on filenames
-// Files are: BAD SISTER, INVASION, KNIFE EDGE, MURDER BOT, SHRINKING, SILO, SMOKE, THE BUCCANTEERS, THE LOST BUS, YOUR FRIENDS
 const SLIDE_DATA = [
-    { title: 'Bad Sister', type: 'Drama', button: 'Stream now' },
-    { title: 'Invasion', type: 'Sci-Fi', button: 'Stream now' },
-    { title: 'Knife Edge', type: 'Documentary', button: 'Stream now' },
-    { title: 'Murder Bot', type: 'Sci-Fi', button: 'Stream now' },
-    { title: 'Shrinking', type: 'Comedy', button: 'Stream now' },
-    { title: 'Silo', type: 'Sci-Fi', button: 'Stream now' },
-    { title: 'Smoke', type: 'Mystery', button: 'Stream now' },
+    { title: 'The Dynasty', type: 'Documentary', button: 'Stream now' },
     { title: 'The Buccaneers', type: 'Drama', button: 'Stream now' },
     { title: 'The Lost Bus', type: 'Action', button: 'Stream now' },
-    { title: 'Your Friends', type: 'Comedy', button: 'Stream now' },
+    { title: 'Bad Monkey', type: 'Comedy', button: 'Stream now' },
+    { title: 'Foundation', type: 'Sci-Fi', button: 'Stream now' },
+    { title: 'Slow Horses', type: 'Thriller', button: 'Stream now' },
+    { title: 'The Morning Show', type: 'Drama', button: 'Stream now' },
+    { title: 'Silo', type: 'Sci-Fi', button: 'Stream now' },
+    { title: 'Hijack', type: 'Thriller', button: 'Stream now' },
+    { title: 'Severance', type: 'Thriller', button: 'Stream now' },
 ]
 
 const SLIDES = Array.from({ length: TOTAL_SLIDES }).map((_, i) => ({
@@ -28,7 +25,6 @@ const SLIDES = Array.from({ length: TOTAL_SLIDES }).map((_, i) => ({
     ...SLIDE_DATA[i % SLIDE_DATA.length]
 }))
 
-// --- Constants ---
 const SMALL_TRANSITION = 'transform 500ms cubic-bezier(0.4, 0, 0.2, 1)'
 const SMALL_SLIDE_HEIGHT = 265
 const SMALL_SLIDE_WIDTH_PX = 430
@@ -36,28 +32,36 @@ const SMALL_SLIDE_GAP = 20
 const CLONE_COUNT = 3
 
 export default function MovieSlider() {
-    // We need enough duplicates to ensure smooth looping.
-    // CSS Keyframe animation will handle the movement.
-    // Hover pauses animation and shows button.
-
-    // Triple the slides to ensure coverage
     const extendedSlides = [...SLIDES, ...SLIDES, ...SLIDES]
 
     return (
-        <div className="w-full  pb-6 overflow-hidden font-sans pt-10">
+        <div className="w-full pb-6 overflow-hidden font-sans pt-10">
             <style>{`
+                :root {
+                    --movie-slide-width: 280px;
+                    --movie-slide-height: 160px;
+                }
+                @media (min-width: 768px) {
+                    :root {
+                        --movie-slide-width: 430px;
+                        --movie-slide-height: 240px;
+                    }
+                }
                 @keyframes marquee {
                     0% { transform: translateX(0); }
-                    100% { transform: translateX(-33.33%); } /* Move 1/3 since we have 3 sets */
+                    100% { transform: translateX(-33.33%); }
                 }
                 .animate-marquee {
                     animation: marquee 70s linear infinite;
+                }
+                .animate-marquee:hover {
+                    animation-play-state: paused;
                 }
             `}</style>
 
             <div className="w-full relative flex flex-col gap-6">
                 {/* === MOVIE SLIDER === */}
-                <div className="w-full overflow-hidden" style={{ height: 350 }}>
+                <div className="w-full overflow-hidden h-[280px] md:h-[350px]">
                     <div
                         className="flex h-full animate-marquee"
                         style={{
@@ -69,9 +73,12 @@ export default function MovieSlider() {
                             <div
                                 key={`${slide.id}-${i}`}
                                 className="relative shrink-0 flex flex-col cursor-pointer group"
-                                style={{ width: '430px', height: '100%' }}
+                                style={{ width: 'var(--movie-slide-width)', height: '100%' }}
                             >
-                                <div className="relative w-full h-[240px] rounded-xl overflow-hidden bg-gray-900 shadow-md transition-transform duration-300 group-hover:scale-[1.02]">
+                                <div
+                                    className="relative w-full rounded-xl overflow-hidden bg-gray-900 shadow-md transition-transform duration-300 group-hover:scale-[1.02]"
+                                    style={{ height: 'var(--movie-slide-height)' }}
+                                >
                                     <img
                                         src={slide.smallImg}
                                         alt={slide.title}

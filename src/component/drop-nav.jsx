@@ -3,11 +3,9 @@ function DropNav({ activeDropdown, showDropdown, hideDropdown, theme }) {
   const textClass = theme === 'dark' ? 'text-[#E8E8ED]' : 'text-[#1d1d1f]';
   const subTextClass = theme === 'dark' ? 'text-[#86868b]' : 'text-[#6e6e73]';
 
-  // Specific overrides if needed, but general text color should work on container
 
   return (
     <>
-      {/* Store Dropdown */}
       <div className={`${bgClass} ${textClass} fixed top-12 left-0 z-50 flex w-full justify-center items-start overflow-hidden transition-all duration-300 ease-in-out transform origin-top ${activeDropdown !== 'store' ? 'scale-y-0 opacity-0' : 'scale-y-100 opacity-100'}`} onMouseEnter={() => showDropdown('store')} onMouseLeave={hideDropdown}>
         <div className="w-5xl flex-none flex justify-center items-start py-8">
           <div className="w-80 flex flex-col">
@@ -41,7 +39,6 @@ function DropNav({ activeDropdown, showDropdown, hideDropdown, theme }) {
         </div>
       </div>
 
-      {/* Mac Dropdown */}
       <div id='dropMac' className={`${bgClass} ${textClass} fixed top-12 left-0 z-50 flex w-full justify-center items-start overflow-hidden transition-all duration-300 ease-in-out transform origin-top ${activeDropdown !== 'mac' ? 'scale-y-0 opacity-0' : 'scale-y-100 opacity-100'}`} onMouseEnter={() => showDropdown('mac')} onMouseLeave={hideDropdown}>
         <div className="w-5xl flex-none flex justify-center items-start py-8">
           <div className="w-80 flex flex-col">
@@ -75,7 +72,6 @@ function DropNav({ activeDropdown, showDropdown, hideDropdown, theme }) {
         </div>
       </div>
 
-      {/* iPad Dropdown */}
       <div id='dropIpad' className={`${bgClass} ${textClass} fixed top-12 left-0 z-50 flex w-full justify-center items-start overflow-hidden transition-all duration-300 ease-in-out transform origin-top ${activeDropdown !== 'ipad' ? 'scale-y-0 opacity-0' : 'scale-y-100 opacity-100'}`} onMouseEnter={() => showDropdown('ipad')} onMouseLeave={hideDropdown}>
         <div className="w-5xl flex-none flex justify-center items-start py-8">
           <div className="w-80 flex flex-col">
@@ -109,7 +105,6 @@ function DropNav({ activeDropdown, showDropdown, hideDropdown, theme }) {
         </div>
       </div>
 
-      {/* iPhone Dropdown */}
       <div id='dropIphone' className={`${bgClass} ${textClass} fixed top-12 left-0 z-50 flex w-full justify-center items-start overflow-hidden transition-all duration-300 ease-in-out transform origin-top ${activeDropdown !== 'iphone' ? 'scale-y-0 opacity-0' : 'scale-y-100 opacity-100'}`} onMouseEnter={() => showDropdown('iphone')} onMouseLeave={hideDropdown}>
         <div className="w-5xl flex-none flex justify-center items-start py-8">
           <div className="w-80 flex flex-col">
@@ -141,7 +136,6 @@ function DropNav({ activeDropdown, showDropdown, hideDropdown, theme }) {
         </div>
       </div>
 
-      {/* Watch Dropdown */}
       <div id='dropWatch' className={`${bgClass} ${textClass} fixed top-12 left-0 z-50 flex w-full justify-center items-start overflow-hidden transition-all duration-300 ease-in-out transform origin-top ${activeDropdown !== 'watch' ? 'scale-y-0 opacity-0' : 'scale-y-100 opacity-100'}`} onMouseEnter={() => showDropdown('watch')} onMouseLeave={hideDropdown}>
         <div className="w-5xl flex-none flex justify-center items-start py-8">
           <div className="w-80 flex flex-col">
@@ -172,7 +166,6 @@ function DropNav({ activeDropdown, showDropdown, hideDropdown, theme }) {
         </div>
       </div>
 
-      {/* Vision Dropdown */}
       <div id='dropVision' className={`${bgClass} ${textClass} fixed top-12 left-0 z-50 flex w-full justify-center items-start overflow-hidden transition-all duration-300 ease-in-out transform origin-top ${activeDropdown !== 'vision' ? 'scale-y-0 opacity-0' : 'scale-y-100 opacity-100'}`} onMouseEnter={() => showDropdown('vision')} onMouseLeave={hideDropdown}>
         <div className="w-5xl flex-none flex justify-center items-start py-8">
           <div className="w-80 flex flex-col">
@@ -198,7 +191,6 @@ function DropNav({ activeDropdown, showDropdown, hideDropdown, theme }) {
         </div>
       </div>
 
-      {/* AirPods Dropdown */}
       <div id='dropAirpods' className={`${bgClass} ${textClass} fixed top-12 left-0 z-50 flex w-full justify-center items-start overflow-hidden transition-all duration-300 ease-in-out transform origin-top ${activeDropdown !== 'airpods' ? 'scale-y-0 opacity-0' : 'scale-y-100 opacity-100'}`} onMouseEnter={() => showDropdown('airpods')} onMouseLeave={hideDropdown}>
         <div className="w-5xl flex-none flex justify-center items-start py-8">
           <div className="w-80 flex flex-col">
@@ -226,7 +218,6 @@ function DropNav({ activeDropdown, showDropdown, hideDropdown, theme }) {
         </div>
       </div>
 
-      {/* TV & Home Dropdown */}
       <div id='dropTv' className={`${bgClass} ${textClass} fixed top-12 left-0 z-50 flex w-full justify-center items-start overflow-hidden transition-all duration-300 ease-in-out transform origin-top ${activeDropdown !== 'tv' ? 'scale-y-0 opacity-0' : 'scale-y-100 opacity-100'}`} onMouseEnter={() => showDropdown('tv')} onMouseLeave={hideDropdown}>
         <div className="w-5xl flex-none flex justify-center items-start py-8">
           <div className="flex-1 w-80 flex flex-col ">
@@ -261,7 +252,6 @@ function DropNav({ activeDropdown, showDropdown, hideDropdown, theme }) {
         </div>
       </div>
 
-      {/* Entertainment Dropdown */}
       <div id='dropEntertainment' className={`${bgClass} ${textClass} fixed top-12 left-0 z-50 flex w-full justify-center items-start overflow-hidden transition-all duration-300 ease-in-out transform origin-top ${activeDropdown !== 'entertainment' ? 'scale-y-0 opacity-0' : 'scale-y-100 opacity-100'}`} onMouseEnter={() => showDropdown('entertainment')} onMouseLeave={hideDropdown}>
         <div className="w-5xl flex-none flex justify-center items-start py-8">
           <div className="w-80 flex flex-col">
@@ -287,7 +277,6 @@ function DropNav({ activeDropdown, showDropdown, hideDropdown, theme }) {
         </div>
       </div>
 
-      {/* Accessories Dropdown */}
       <div id='dropAccessories' className={`${bgClass} ${textClass} fixed top-12 left-0 z-50 flex w-full justify-center items-start overflow-hidden transition-all duration-300 ease-in-out transform origin-top ${activeDropdown !== 'accessories' ? 'scale-y-0 opacity-0' : 'scale-y-100 opacity-100'}`} onMouseEnter={() => showDropdown('accessories')} onMouseLeave={hideDropdown}>
         <div className="w-5xl flex-none flex justify-center items-start py-8">
           <div className="w-80 flex flex-col">
@@ -313,7 +302,6 @@ function DropNav({ activeDropdown, showDropdown, hideDropdown, theme }) {
         </div>
       </div>
 
-      {/* Support Dropdown */}
       <div id='dropSupport' className={`${bgClass} ${textClass} fixed top-12 left-0 z-50 flex w-full justify-center items-start overflow-hidden transition-all duration-300 ease-in-out transform origin-top ${activeDropdown !== 'support' ? 'scale-y-0 opacity-0' : 'scale-y-100 opacity-100'}`} onMouseEnter={() => showDropdown('support')} onMouseLeave={hideDropdown}>
         <div className="w-5xl flex-none flex justify-center items-start py-8">
           <div className="w-80 flex flex-col">

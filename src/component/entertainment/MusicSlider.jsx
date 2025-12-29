@@ -1,22 +1,25 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 
-// --- Asset Imports ---
 const musicImages = import.meta.glob('../../assets/imageEntertain/music/*.{jpeg,jpg,png}', { eager: true, as: 'url' })
 const processImages = (imgObj) => Object.values(imgObj).sort()
 const musicImgList = processImages(musicImages)
 
-const TOTAL_SLIDES = 7
+const TOTAL_SLIDES = 13
 
-// Static Metadata based on filenames
-// Files are: A list Pop, Alpha, New Music Daily, Rap Life, Sabrina Carpenter, Today's Hits, iDail Play
 const SLIDE_DATA = [
-    { title: 'A list Pop', type: 'Apple Music Pop', button: 'Listen now' },
-    { title: 'Alpha', type: 'Apple Music', button: 'Listen now' },
-    { title: 'New Music Daily', type: 'Apple Music', button: 'Listen now' },
-    { title: 'Rap Life', type: 'Apple Music Hip-Hop', button: 'Listen now' },
-    { title: 'Sabrina Carpenter', type: 'Apple Music', button: 'Listen now' },
-    { title: "Today's Hits", type: 'Apple Music', button: 'Listen now' },
-    { title: 'iDail Play', type: 'Apple Music Country', button: 'Listen now' },
+    { title: 'Espresso', type: 'Sabrina Carpenter', button: 'Stream now' },
+    { title: 'BIRDS OF A FEATHER', type: 'Billie Eilish', button: 'Stream now' },
+    { title: 'Good Luck, Babe!', type: 'Chappell Roan', button: 'Stream now' },
+    { title: 'Not Like Us', type: 'Kendrick Lamar', button: 'Stream now' },
+    { title: 'A Bar Song (Tipsy)', type: 'Shaboozey', button: 'Stream now' },
+    { title: 'I Had Some Help', type: 'Post Malone ft. Morgan Wallen', button: 'Stream now' },
+    { title: 'Houdini', type: 'Eminem', button: 'Stream now' },
+    { title: 'Million Dollar Baby', type: 'Tommy Richman', button: 'Stream now' },
+    { title: 'Pink Skies', type: 'Zach Bryan', button: 'Stream now' },
+    { title: 'Please Please Please', type: 'Sabrina Carpenter', button: 'Stream now' },
+    { title: 'Lunch', type: 'Billie Eilish', button: 'Stream now' },
+    { title: 'Close to You', type: 'Gracie Abrams', button: 'Stream now' },
+    { title: 'Fortnight', type: 'Taylor Swift ft. Post Malone', button: 'Stream now' },
 ]
 
 const SLIDES = Array.from({ length: TOTAL_SLIDES }).map((_, i) => ({
@@ -26,12 +29,19 @@ const SLIDES = Array.from({ length: TOTAL_SLIDES }).map((_, i) => ({
 }))
 
 export default function MusicSlider() {
-    // Triple the slides to ensure coverage for smooth looping
     const extendedSlides = [...SLIDES, ...SLIDES, ...SLIDES]
 
     return (
-        <div className="w-full  pb-6 overflow-hidden font-sans pt-10">
+        <div className="w-full pb-6 overflow-hidden font-sans pt-10">
             <style>{`
+                :root {
+                    --music-slide-size: 160px;
+                }
+                @media (min-width: 768px) {
+                    :root {
+                        --music-slide-size: 234px;
+                    }
+                }
                 @keyframes marquee-music {
                     0% { transform: translateX(0); }
                     100% { transform: translateX(-33.33%); }
@@ -39,11 +49,13 @@ export default function MusicSlider() {
                 .animate-marquee-music {
                     animation: marquee-music 35s linear infinite;
                 }
+                .animate-marquee-music:hover {
+                    animation-play-state: paused;
+                }
             `}</style>
 
             <div className="w-full relative flex flex-col gap-6">
-                {/* === MUSIC SLIDER === */}
-                <div className="w-full overflow-hidden" style={{ height: 320 }}>
+                <div className="w-full overflow-hidden h-[250px] md:h-[320px]">
                     <div
                         className="flex h-full animate-marquee-music"
                         style={{
@@ -55,16 +67,18 @@ export default function MusicSlider() {
                             <div
                                 key={`${slide.id}-${i}`}
                                 className="relative shrink-0 flex flex-col cursor-pointer group"
-                                style={{ width: '234px', height: '100%' }}
+                                style={{ width: 'var(--music-slide-size)', height: '100%' }}
                             >
-                                <div className="relative w-full h-[234px] rounded-xl overflow-hidden bg-gray-900 shadow-md transition-transform duration-300 group-hover:scale-[1.02]">
+                                <div
+                                    className="relative w-full rounded-xl overflow-hidden bg-gray-900 shadow-md transition-transform duration-300 group-hover:scale-[1.02]"
+                                    style={{ height: 'var(--music-slide-size)' }}
+                                >
                                     <img
                                         src={slide.smallImg}
                                         alt={slide.title}
                                         className="w-full h-full object-cover transition-all duration-300 group-hover:brightness-50"
                                     />
 
-                                    {/* Listen Now Overlay - Visible on Group Hover */}
                                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                         <button className="bg-white text-black px-6 py-3 rounded-full font-bold text-sm flex items-center gap-2 hover:scale-105 transition-transform">
                                             Listen now
