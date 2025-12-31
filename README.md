@@ -1,4 +1,16 @@
-# React + Vite
+# Apple Clone - Portfolio Project
+
+> [!WARNING]
+> **Google Chrome users may see a "Dangerous Site" warning.**
+> This happens because this project is a pixel-perfect clone of the Apple website, and Google's automated systems mistook it for a phishing attempt.
+> 
+> **To view the site:**
+> 1. Click **Details** on the red warning screen.
+> 2. Click **"visit this unsafe site"** at the bottom.
+> 
+> *This is a personal education project and is NOT affiliated with Apple Inc.*
+
+## React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
